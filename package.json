@@ -9,6 +9,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {}
+  "license": "GPL-3.0",
+  "dependencies": {
+    "apollo-server": "^3.12.0",
+    "apollo-server-express": "^3.x.x",
+    "dotenv": "^16.0.3",
+    "express": "^4.x.x",
+    "graphql": "^16.6.0",
+    "pg": "^8.11.0"
+  }
 }

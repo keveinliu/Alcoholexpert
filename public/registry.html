@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 300px; margin: 0 auto; padding: 20px; }
+        input { width: 100%; padding: 5px; margin: 5px 0; }
+        button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>用户注册</h2>
+    <form id="registerForm">
+        <input type="text" id="username" placeholder="用户名" required>
+        <input type="password" id="password" placeholder="密码" required>
+        <input type="email" id="email" placeholder="邮箱" required>
+        <button type="submit">注册</button>
+    </form>
+    <p id="message"></p>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+
+            const query = `
+                mutation RegisterUser($username: String!, $password: String!, $email: String!) {
+                    registerUser(username: $username, password: $password, email: $email) {
+                        id
+                        username
+                        email
+                    }
+                }
+            `;
+
+            try {
+                const response = await fetch('/graphql', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        query,
+                        variables: { username, password, email }
+                    })
+                });
+                const result = await response.json();
+                if (result.errors) {
+                    document.getElementById('message').textContent = result.errors[0].message;
+                } else {
+                    document.getElementById('message').textContent = '注册成功！';
+                }
+            } catch (error) {
+                document.getElementById('message').textContent = '注册失败，请稍后再试。';
+            }
+        });
+    </script>
+</body>
+</html>
